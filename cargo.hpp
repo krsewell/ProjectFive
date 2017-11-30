@@ -1,3 +1,10 @@
+/*
+ *   kjs170430_Project5/cargo.hpp
+ *   Copyright 2017, Kristopher Sewell, All rights reserved.
+ *
+ *   Course:  CE1337  Section:  501   Project: 5
+ */
+
 #ifndef CARGO_H_INCL_GUARD
 #define CARGO_H_INCL_GUARD
 
