@@ -7,19 +7,22 @@
 
 #include "planet.hpp"
 
-Planet::Planet() {}
+Planet::Planet() {
+  m_gravity = 0.0;
+  m_distancetoSun = 0;
+}
 
 Planet::~Planet() {}
 
-weight Planet::earthwgt(weight w) {
-  return (w * this->m_gravity);
-}
-
-weight Planet::planetwgt(weight w) {
+weight Planet::earthwgt(weight w) const {
   return (w / this->m_gravity);
 }
 
-distance Planet::distanceto(Planet& p) {
+weight Planet::planetwgt(weight w) const {
+  return (w * this->m_gravity);
+}
+
+distance Planet::distanceto(Planet& p) const{
   return this->m_distancetoSun > p.m_distancetoSun ? 
           this->m_distancetoSun - p.m_distancetoSun :
           p.m_distancetoSun - this->m_distancetoSun;

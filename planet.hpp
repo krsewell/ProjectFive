@@ -10,9 +10,9 @@
 
 #include <cmath>
 
-using weight = unsigned;
+using weight = int;
 using gravity = float;
-using distance = unsigned;
+using distance = long long;
 
 class Planet {
 private:
@@ -24,9 +24,9 @@ public:
   Planet(gravity,distance);
   ~Planet();
 
-  weight earthwgt(weight);
-  weight planetwgt(weight);
-  distance distanceto(Planet&);
+  weight earthwgt(weight) const;
+  weight planetwgt(weight) const;
+  distance distanceto(Planet&) const;
 
   void setGravity(const gravity x);
   void setDistance(const distance d);

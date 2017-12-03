@@ -34,6 +34,9 @@ reated by https://www.gitignore.io/api/c++,visualstudiocode
 *.out
 *.app
 
+# Text files
+*.txt
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json

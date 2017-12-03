@@ -4,3 +4,10 @@
  *
  *   Course:  CE1337  Section:  501   Project: 5
  */
+#include "trip.hpp"
+
+Trip::Trip(Planet& s, Planet& d, speed v, Cargo& c, Ship& t) : 
+    _src(s), _dst(d), _cargo(c), _ship(t) 
+{
+    _speed = abs(v);
+}

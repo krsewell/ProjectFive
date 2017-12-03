@@ -9,23 +9,32 @@
 #define CARGO_H_INCL_GUARD
 
 #include <string>
+#include <cstring>
 #include "planet.hpp"
 
-using std::string;
-using speed = unsigned;
-using time = unsigned long long;
+using weight = int;
+using std::strlen;
+
 
 class Cargo {
-private:
-  Planet& m_source;
-  Planet& m_destination;
-  weight m_earth_weight;
-  string m_type;
-  time m_duration;
+protected:
+  weight _src_weight;
+  weight _dst_weight;
+  weight _earth_weight;
+  std::string _type;
 
 public:
+  Cargo();
+  Cargo(weight,std::string);
+  void setEarthWgt(const Planet&);
+  void setDstWgt(const Planet&);
+  void setSrcWgt(weight);
+  void setType(std::string);
 
-
+  weight getEarthWgt() const;
+  weight getDstWgt() const;
+  weight getSrcWgt() const;
+  std::string printType() const;
 
 };
 
