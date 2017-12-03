@@ -35,7 +35,7 @@ reated by https://www.gitignore.io/api/c++,visualstudiocode
 *.app
 
 # Text files
-*.txt
+*.TXT
 
 ### VisualStudioCode ###
 .vscode/*
