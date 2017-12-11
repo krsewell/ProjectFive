@@ -18,12 +18,12 @@
     _type = t;
   }
 
-  void Cargo::setEarthWgt(const Planet& p) {
-    this->_earth_weight = p.earthwgt(this->_src_weight);
+  void Cargo::setEarthWgt(const std::shared_ptr<Planet> p) {
+    this->_earth_weight = p->earthwgt(this->_src_weight);
   }
 
-  void Cargo::setDstWgt(const Planet& p) {
-    this->_dst_weight = p.planetwgt(this->_earth_weight);
+  void Cargo::setDstWgt(const std::shared_ptr<Planet> p) {
+    this->_dst_weight = p->planetwgt(this->_earth_weight);
   }
 
   void Cargo::setSrcWgt(weight w) {

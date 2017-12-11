@@ -19,6 +19,7 @@
 #include "planet.hpp"
 #include "ship.hpp"
 #include "trip.hpp"
+#include "menu.hpp"
 
 using speed = long long;
 using weight = int;
@@ -27,8 +28,9 @@ using distance = long long;
 
 void printheader();
 void initTransport(std::map<std::string,std::shared_ptr<Planet>>&, std::vector<std::shared_ptr<Ship>>&, std::ofstream&);
+Trip getuserinput(const std::map<std::string,std::shared_ptr<Planet>>&, const std::vector<std::shared_ptr<Ship>>&);
 std::string getDefaultSettings();
-
+bool again();
 
 
 
@@ -39,6 +41,14 @@ int main() {
 
   printheader();
   initTransport(planets,ships,fout);
+  while (true) {
+    Trip trip = getuserinput(planets,ships);
+    trip._cargo->setEarthWgt(trip._src);
+    trip._cargo->setDstWgt(trip._dst);
+    
+    
+    if (again()) break;
+  }
 
 
   return 0;
@@ -58,7 +68,9 @@ void printheader() {
             << std::endl << std::endl;
 }
 
-void initTransport(std::map<std::string,std::shared_ptr<Planet>>& p, std::vector<std::shared_ptr<Ship>>& s, std::ofstream& f) {
+void initTransport(std::map<std::string,std::shared_ptr<Planet>>& p, 
+                    std::vector<std::shared_ptr<Ship>>& s, 
+                    std::ofstream& f) {
   /*  
     Open the settings file. If it doesn't exist create it. If it is inaccessable we should exit the program. 
   */
@@ -150,4 +162,52 @@ std::string getDefaultSettings() {
           << "turn.gravity=1.17\n\nPlanet=Uranus\nUranus.distance=1782\nUranus.gravity=0.92\n\nPlanet=Neptune\nNeptune.dis"
           << "tance=2793\nNeptune.gravity=1.44\n";
   return stream.str();
+}
+
+Trip getuserinput(const std::map<std::string,std::shared_ptr<Planet>>& p,
+                    const std::vector<std::shared_ptr<Ship>>& s) {
+  //ask for the source and destination; present menu...
+  std::vector<PlanetOption> planetvector;
+  int a = 1;
+  for (auto i = p.begin(); i != p.end(); i++) {
+    planetvector.push_back(PlanetOption(i->second,a++,i->first));
+  }
+  std::string str = "Below are the locations that we may pickup or deliver cargo.\n";
+  Menu<PlanetOption,Planet> planetmenu(planetvector, str);
+  
+  std::cout << "Please enter a pickup location: " << std::endl;
+  std::shared_ptr<Planet> src = planetmenu.PrintMenu();
+  std::cout << "Please enter a dropoff location: " << std::endl;
+  std::shared_ptr<Planet> dst = planetmenu.PrintMenu();
+
+  //what kind of cargo?
+  std::cout << "What type are cargo will we be transporting?" << std::endl;
+  std::string cargotype;
+  inputReturn(cargotype);
+
+  //find max weight; ask for desired weight...
+  weight x = src->earthwgt(s.at(0)->getWeightLimit());
+  weight y = dst->earthwgt(s.at(0)->getWeightLimit());
+  weight lowerlimit, cargoweight = s.at(0)->getWeightLimit() + 1;
+  x > y ? lowerlimit = y : lowerlimit = x;
+  while (cargoweight > lowerlimit) {
+    std::cout << "We can transport " << std::to_string(lowerlimit) << "lbs on this route."
+              << std::endl << "Please enter cargo weight on pickup planet: ";
+    inputReturn(cargoweight);
+    std::cout << std::endl;
+  }
+
+  //get speed and check against ship max speed
+  speed ship_speed = s.at(0)->getSpeedLimit() + 1;
+  while (ship_speed > s.at(0)->getSpeedLimit() || ship_speed < 1) {
+    std::cout << "The ship can move at a max speed of " << std::to_string(s.at(0)->getSpeedLimit()) 
+              << "mph. How fast would you like to go? " << std::endl;
+    inputReturn(ship_speed);
+    std::cout << std::endl;
+  }
+
+  //ship pointer
+  std::shared_ptr<Ship> ship = s.at(0); 
+
+  return Trip(src,dst,ship_speed,std::make_shared<Cargo>(cargoweight,cargotype),ship);
 }

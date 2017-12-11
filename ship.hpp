@@ -15,14 +15,14 @@ using weight = int;
 
 class Ship {
 protected:
-    speed _speed_limit;
-    weight _weight_limit;
+  speed _speed_limit;
+  weight _weight_limit;
 public:
-    Ship();
-    Ship(speed,weight);
-    ~Ship();
-    const speed getSpeedLimit();
-    const weight getWeightLimit();
+  Ship();
+  Ship(speed,weight);
+  ~Ship();
+  const speed getSpeedLimit() const;
+  const weight getWeightLimit() const;
 
 };
 

@@ -10,6 +10,7 @@
 
 #include <string>
 #include <cstring>
+#include <memory>
 #include "planet.hpp"
 
 using weight = int;
@@ -26,8 +27,8 @@ protected:
 public:
   Cargo();
   Cargo(weight,std::string);
-  void setEarthWgt(const Planet&);
-  void setDstWgt(const Planet&);
+  void setEarthWgt(const std::shared_ptr<Planet>);
+  void setDstWgt(const std::shared_ptr<Planet>);
   void setSrcWgt(weight);
   void setType(std::string);
 

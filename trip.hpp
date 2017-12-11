@@ -8,6 +8,8 @@
 #ifndef TRIP_H_INCL_GUARD
 #define TRIP_H_INCL_GUARD
 
+#include <memory>
+
 #include "cargo.hpp"
 #include "planet.hpp"
 #include "ship.hpp"
@@ -15,16 +17,23 @@
 
 class Trip {
 public:
-    const Planet& _src;
-    const Planet& _dst;
-    speed _speed;
-    Cargo& _cargo;
-    const Ship& _ship;
+  const std::shared_ptr<Planet> _src;
+  const std::shared_ptr<Planet> _dst;
+  speed _speed;
+  std::shared_ptr<Cargo> _cargo;
+  const std::shared_ptr<Ship> _ship;
 
-    Trip(Planet&,Planet&,speed,Cargo&,Ship&);
-    ~Trip();
+  Trip::Trip(std::shared_ptr<Planet> s, 
+              std::shared_ptr<Planet> d, 
+              speed v, 
+              std::shared_ptr<Cargo> c, 
+              std::shared_ptr<Ship> t) : 
+    _src(s), _dst(d), _cargo(c), _ship(t) 
+  {
+  _speed = abs(v);
+  }
 
-
+  ~Trip();
 };
 
 #endif
