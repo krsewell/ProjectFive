@@ -7,45 +7,54 @@
 
 #include "cargo.hpp"
 
+Cargo::Cargo()
+{
+  _src_weight = 0;
+  _type = "";
+}
 
-  Cargo::Cargo() {
-    _src_weight = 0;
-    _type = "";
-  }
+Cargo::Cargo(weight w, std::string t)
+{
+  _src_weight = abs(w);
+  setType(t);
+}
 
-  Cargo::Cargo(weight w, std::string t) {
-    _src_weight = abs(w);
-    _type = t;
-  }
+void Cargo::setEarthWgt(const std::shared_ptr<Planet> p)
+{
+  this->_earth_weight = p->earthwgt(this->_src_weight);
+}
 
-  void Cargo::setEarthWgt(const std::shared_ptr<Planet> p) {
-    this->_earth_weight = p->earthwgt(this->_src_weight);
-  }
+void Cargo::setDstWgt(const std::shared_ptr<Planet> p)
+{
+  this->_dst_weight = p->planetwgt(this->_earth_weight);
+}
 
-  void Cargo::setDstWgt(const std::shared_ptr<Planet> p) {
-    this->_dst_weight = p->planetwgt(this->_earth_weight);
-  }
+void Cargo::setSrcWgt(weight w)
+{
+  this->_src_weight = abs(w);
+}
 
-  void Cargo::setSrcWgt(weight w) {
-    this->_src_weight = abs(w);
-  }
+void Cargo::setType(std::string t)
+{
+  this->_type = std::strlen(t.c_str()) > static_cast<size_t>(32) ? t.substr(0, 29) + "..." : t;
+}
 
-  void Cargo::setType(std::string t) {
-    this->_type = std::strlen(t.c_str()) > static_cast<size_t>(60) ? t.substr(0,60) + "..." : t;
-  }
+weight Cargo::getEarthWgt() const
+{
+  return this->_earth_weight;
+}
 
-  weight Cargo::getEarthWgt() const {
-    return this->_earth_weight;
-  }
+weight Cargo::getDstWgt() const
+{
+  return this->_dst_weight;
+}
 
-  weight Cargo::getDstWgt() const {
-    return this->_dst_weight; 
-  }
+weight Cargo::getSrcWgt() const
+{
+  return this->_src_weight;
+}
 
-  weight Cargo::getSrcWgt() const {
-    return this->_src_weight;
-  }
-
-  std::string Cargo::printType() const {
-    return this->_type;
-  }
+std::string Cargo::printType() const
+{
+  return this->_type;
+}

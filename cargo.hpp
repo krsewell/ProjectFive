@@ -13,11 +13,11 @@
 #include <memory>
 #include "planet.hpp"
 
-using weight = int;
+using weight = float;
 using std::strlen;
 
-
-class Cargo {
+class Cargo
+{
 protected:
   weight _src_weight;
   weight _dst_weight;
@@ -26,7 +26,7 @@ protected:
 
 public:
   Cargo();
-  Cargo(weight,std::string);
+  Cargo(weight, std::string);
   void setEarthWgt(const std::shared_ptr<Planet>);
   void setDstWgt(const std::shared_ptr<Planet>);
   void setSrcWgt(weight);
@@ -36,7 +36,6 @@ public:
   weight getDstWgt() const;
   weight getSrcWgt() const;
   std::string printType() const;
-
 };
 
 #endif

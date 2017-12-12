@@ -11,28 +11,27 @@
 #include <iostream>
 #include <cmath>
 
-using weight = int;
+using weight = float;
 using gravity = float;
 using distance = long long;
 
-class Planet {
+class Planet
+{
 private:
-  gravity m_gravity;                // should always be a positive number
-  distance m_distancetoSun; 
+  gravity m_gravity; // should always be a positive number
+  distance m_distancetoSun;
 
 public:
   Planet();
-  Planet(gravity,distance);
+  Planet(gravity, distance);
   ~Planet();
 
   weight earthwgt(weight) const;
   weight planetwgt(weight) const;
-  distance distanceto(Planet&) const;
+  distance distanceto(Planet &) const;
 
   void setGravity(const gravity x);
   void setDistance(const distance d);
 };
-
-
 
 #endif
