@@ -10,6 +10,7 @@
 Planet::Planet() {
   m_gravity = 0.0;
   m_distancetoSun = 0;
+  std::cout << "Planet created\n";
 }
 
 Planet::~Planet() {}

@@ -23,17 +23,21 @@ public:
   std::shared_ptr<Cargo> _cargo;
   const std::shared_ptr<Ship> _ship;
 
-  Trip::Trip(std::shared_ptr<Planet> s, 
-              std::shared_ptr<Planet> d, 
-              speed v, 
-              std::shared_ptr<Cargo> c, 
-              std::shared_ptr<Ship> t) : 
+  Trip(std::shared_ptr<Planet> s, 
+      std::shared_ptr<Planet> d, 
+      speed v, 
+      std::shared_ptr<Cargo> c, 
+      std::shared_ptr<Ship> t) : 
     _src(s), _dst(d), _cargo(c), _ship(t) 
   {
   _speed = abs(v);
   }
 
-  ~Trip();
+  Trip(const Trip& obj) : _src(obj._src), _dst(obj._dst), _cargo(obj._cargo), _ship(obj._ship) {
+    _speed = obj._speed;
+  }
+
+  ~Trip() {}
 };
 
 #endif

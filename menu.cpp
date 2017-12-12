@@ -37,33 +37,37 @@ void PlanetOption::action(){
 
 }
 
-template<typename T>
-Menu<T>::Menu(std::vector<T> v, std::string s) {
-  this->_menu = v;
+
+Menu::Menu(std::vector<PlanetOption> v, std::string s) {
+  std::copy(v.begin(),v.end(),std::back_inserter(this->_menu));
   this->_header = s;
 }
 
-template<typename T,typename P>
-std::shared_ptr<P> Menu<T>::PrintMenu() {
-  int index = 0;
-  int check[this->_menu.size()] = {};
+
+std::shared_ptr<Planet> Menu::PrintMenu() {
+  std::vector<int>check;
   //prints out menu options
-  std::cout << _header << std::endl;
-  for (auto it = this->_menu.begin(); it != this->_menu.end(); it++) {
-    if (this->_menu.at(it).checkDisplay()) {
-      this->_menu.at(it).displayMenuOption();
-      check[index++] = this->_menu.at(it).menuNum();
+  std::cout << this->_header << std::endl;
+  for (auto& it : this->_menu) {
+    if (it.checkDisplay()) {
+      it.displayMenuOption();
+      check.push_back(it.menuNum());
     }
   }
-
+  //big O for verification and search is n^2. however, ranges should be fairly small. 
   while (true) {
     int x;
     inputReturn(x); 
     // will return an int but we need to make sure it matchs a menu choice.
-    for (int index = 0; index < this->_menu.size(); index++) {
-      if (check[index] == x) {
-        this->_menu.at(x).toggleDisplay();
-        return this->_menu.at(x)->_planetPtr;
+    for (auto s : check) {
+      if (s == x) {
+        // find the menu option. 
+        for(auto& opt : this->_menu) {
+          if (x == opt.menuNum()) {
+            opt.toggleDisplay();
+            return opt._planetPtr;
+          }
+        }
       }
     }
     std::cout << "Incorrect Option: please try again.\n";

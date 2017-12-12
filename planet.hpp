@@ -8,6 +8,7 @@
 #ifndef PLANET_H_INCL_GUARD
 #define PLANET_H_INCL_GUARD
 
+#include <iostream>
 #include <cmath>
 
 using weight = int;

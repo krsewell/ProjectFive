@@ -43,8 +43,8 @@ int main() {
   initTransport(planets,ships,fout);
   while (true) {
     Trip trip = getuserinput(planets,ships);
-    trip._cargo->setEarthWgt(trip._src);
-    trip._cargo->setDstWgt(trip._dst);
+   // trip._cargo->setEarthWgt(trip._src);
+   // trip._cargo->setDstWgt(trip._dst);
     
     
     if (again()) break;
@@ -95,26 +95,31 @@ void initTransport(std::map<std::string,std::shared_ptr<Planet>>& p,
     Next parse each line. When we find a '#' or empty line we will continue.
   */
   int line = 0;
-  std::vector<std::string> keywords = {"PLANET","OUTPUTFILE"};
-  
+  std::vector<std::string> static_keywords;
+  std::vector<std::string> dynamic_keywords;
+  auto kit = static_keywords.begin();
+  kit = static_keywords.insert(kit,std::string("OUTPUTFILE"));
+  kit = static_keywords.insert(kit,std::string("PLANET"));
+  // first run we can only find planet and output file. So build new list that
+  // we will use later.
   while (file.good()) {
     std::string str;
     std::getline(file,str);
     line++;
+    if (str.empty() || str.at(0) == '#') continue;
+    
     trim(str);
     capitolize(str);
-    if (str.empty() || str.at(0) == '#') continue;
-    for (std::string k : keywords) {
+    for (auto k : static_keywords) {
       auto x = str.find(k);
-      
       if (x == std::string::npos) continue;
       
       if (k == "PLANET") {
         trim(str);
         truc(str);
-        //std::cout << "Planet name: " << str << std::endl;
-        keywords.push_back(str);
-        p[str] = std::make_shared<Planet>();
+        std::cout << "Planet name: " << str << std::endl;
+        dynamic_keywords.push_back(str);
+        p.insert(std::pair<std::string,std::shared_ptr<Planet>>(str, std::make_shared<Planet>()));
       }
       else if (k == "OUTPUTFILE") {
         trim(str);
@@ -123,20 +128,38 @@ void initTransport(std::map<std::string,std::shared_ptr<Planet>>& p,
         //std::cout << "File name: " << str << std::endl;
         f.open(str,std::ios::app);
       }
-      else {
-        //find keywords distance or gravity and call appropriate object function.
-        auto d = str.find("DISTANCE");
-        auto g = str.find("GRAVITY");
-        trim(str);
-        truc(str);
-        if (d != std::string::npos) {
-          //std::cout << "\tDistance from Sun: " << std::stoll(str) << std::endl;
-          p[k]->setDistance(std::stoll(str));
-        }
-        else if (g != std::string::npos) {
-          //std::cout << "\tGravity Coefficent: " << std::stof(str) << std::endl;
-          p[k]->setGravity(std::stof(str));
-        }
+    }
+  }
+  //reset file here. then run second pass.      
+  line = 0;
+  
+  file.clear();
+  file.seekg(0,file.beg);
+  
+  while (file.good()) {
+    std::string str;
+    std::getline(file,str);
+    line++;
+
+    if (str.empty() || str.at(0) == '#') continue;
+    
+    trim(str);
+    capitolize(str);  
+    for (auto k : dynamic_keywords) {
+      auto x = str.find(k);
+      if (x == std::string::npos) continue;
+      //find keywords distance or gravity and call appropriate object function.
+      auto d = str.find("DISTANCE");
+      auto g = str.find("GRAVITY");
+      trim(str);
+      truc(str);
+      if (d != std::string::npos) {
+        //std::cout << "\tDistance from Sun: " << std::stoll(str) << std::endl;
+        p[k]->setDistance(std::stoll(str));
+      }
+      else if (g != std::string::npos) {
+        //std::cout << "\tGravity Coefficent: " << std::stof(str) << std::endl;
+        p[k]->setGravity(std::stof(str));
       }
     }
   }
@@ -173,7 +196,7 @@ Trip getuserinput(const std::map<std::string,std::shared_ptr<Planet>>& p,
     planetvector.push_back(PlanetOption(i->second,a++,i->first));
   }
   std::string str = "Below are the locations that we may pickup or deliver cargo.\n";
-  Menu<PlanetOption,Planet> planetmenu(planetvector, str);
+  Menu planetmenu(planetvector, str);
   
   std::cout << "Please enter a pickup location: " << std::endl;
   std::shared_ptr<Planet> src = planetmenu.PrintMenu();
@@ -210,4 +233,8 @@ Trip getuserinput(const std::map<std::string,std::shared_ptr<Planet>>& p,
   std::shared_ptr<Ship> ship = s.at(0); 
 
   return Trip(src,dst,ship_speed,std::make_shared<Cargo>(cargoweight,cargotype),ship);
+}
+
+bool again() {
+  return true;
 }

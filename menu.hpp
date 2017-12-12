@@ -13,6 +13,7 @@
 #include <string>
 #include <memory>
 #include "planet.hpp"
+#include "inputtools.hpp"
 
 /*
   Defines the classes required to implement the menu system for this program. 
@@ -33,24 +34,22 @@ public:
   int menuNum(); 
 };
 
-template<typename T, typename P>
+class PlanetOption : public Option {
+           
+public:
+  std::shared_ptr<Planet> _planetPtr; //needed to reference the planet information for action()
+  PlanetOption(std::shared_ptr<Planet>,int,const std::string);
+  void action(); 
+};
+
 class Menu {
 private:
-  std::vector<T> _menu;
+  std::vector<PlanetOption> _menu;
   std::string _header;
 
 public:
-  Menu(std::vector<T>,std::string);
-  std::shared_ptr<P> PrintMenu();
-};
-
-
-class PlanetOption : protected Option {
-           
-public:
-  const std::shared_ptr<Planet> _planetPtr; //needed to reference the planet information for action()
-  PlanetOption(std::shared_ptr<Planet>,int,const std::string);
-  void action(); 
+  Menu(std::vector<PlanetOption>,std::string);
+  std::shared_ptr<Planet> PrintMenu();
 };
 
 #endif

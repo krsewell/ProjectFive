@@ -3,11 +3,13 @@
 
 #include <iostream>
 #include <limits>
+#include <algorithm>
+#include <cctype>
 
 
 
 template<typename T>
-void inputReturn(T& var) {
+inline void inputReturn(T& var) {
     while (true) {
         if (std::cin >> var) {
             return;
@@ -20,16 +22,16 @@ void inputReturn(T& var) {
 }
 
 template<typename T>
-bool isPositive(const T var) {
+inline bool isPositive(const T var) {
     return var >= 0 ? true:false;
 }
 
 template<typename T>
-bool isZero(const T var) {
+inline bool isZero(const T var) {
     return var == 0 ? true:false;
 }
 
-void trim(std::string& s, char ch = ' ') {
+inline void trim(std::string& s, char ch = ' ') {
     const auto begin = s.find_first_not_of(ch);
     const auto end = s.find_last_not_of(ch);
     if (begin == std::string::npos){
@@ -44,16 +46,14 @@ void trim(std::string& s, char ch = ' ') {
         trim(s);
 }
 
-void truc(std::string& s, char ch = '=') {
+inline void truc(std::string& s, char ch = '=') {
     const auto begin = s.find_first_of(ch);
     const auto end = s.size();
     s = s.substr(begin + 1,(end - begin + 1));
 }
 
-void capitolize(std::string& s) {
-    for (auto& c : s) {
-        c = toupper(c);
-    }
+inline void capitolize(std::string& s) {
+  std::transform(s.begin(), s.end(), s.begin(), toupper);
 }
 
 #endif
