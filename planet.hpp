@@ -29,6 +29,7 @@ public:
   weight earthwgt(weight) const;
   weight planetwgt(weight) const;
   distance distanceto(Planet &) const;
+  gravity getGravity() const;
 
   void setGravity(const gravity x);
   void setDistance(const distance d);

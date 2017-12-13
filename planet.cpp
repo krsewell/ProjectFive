@@ -11,7 +11,6 @@ Planet::Planet()
 {
   m_gravity = 0.0;
   m_distancetoSun = 0;
-  std::cout << "Planet created\n";
 }
 
 Planet::~Planet() {}
@@ -26,6 +25,11 @@ weight Planet::planetwgt(weight w) const
 {
   auto x = w * this->m_gravity;
   return static_cast<weight>(x);
+}
+
+gravity Planet::getGravity() const 
+{
+  return this->m_gravity;
 }
 
 distance Planet::distanceto(Planet &p) const

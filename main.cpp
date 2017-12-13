@@ -270,24 +270,26 @@ Trip getuserinput(const std::map<std::string, std::shared_ptr<Planet>> &p,
   Menu planetmenu(planetvector, str);
   
   auto src = planetmenu.PrintMenu(prompt1);
-  std::cout << src->planetwgt(10) << std::endl;
+  //std::cout << src->planetwgt(10) << std::endl;
   auto dst = planetmenu.PrintMenu(prompt2);
-  std::cout << dst->planetwgt(10) << std::endl;
+  //std::cout << dst->planetwgt(10) << std::endl;
   //what kind of cargo?
   std::cout << "What type are cargo will we be transporting?" << std::endl;
   std::string cargotype;
   inputReturn(cargotype);
 
   //find max weight; ask for desired weight...
-  weight x = src->planetwgt(s.at(0)->getWeightLimit()); //find the max weight that ship can hold on src
-  weight y = dst->planetwgt(s.at(0)->getWeightLimit()); //find the max weight that ship can hold on dst
+  weight x = src->earthwgt(s.at(0)->getWeightLimit()); //find the max weight that ship can hold at src
+  weight y = dst->earthwgt(s.at(0)->getWeightLimit()); //find the max weight that ship can hold at dst
+  
   weight lowerlimit, cargoweight = -1;
-  x > y ? lowerlimit = y : lowerlimit = x;  //find the lowest limit
- 
-  while (cargoweight > lowerlimit || cargoweight < 0)
+  x > y ? lowerlimit = y : lowerlimit = x;  //find the lowest earthwgt limit of src and dst.
+  auto trip_limit = src->planetwgt(lowerlimit);
+  
+  while (cargoweight > trip_limit || cargoweight < 0)
   {
     std::cout << "We can transport " << std::fixed << std::setprecision(2) 
-              << lowerlimit << "lbs on this route."  << std::endl;
+              << trip_limit << "lbs on this route."  << std::endl;
     auto prompt4 = "Please enter cargo weight on pickup planet: ";
     inputReturn(cargoweight,prompt4);
   }

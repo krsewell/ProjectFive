@@ -36,7 +36,8 @@ const weight Ship::getWeightLimit() const
 
 hours Ship::calcTravelTime(speed velocity, distance miles) const 
 {
-  return velocity * miles * 1000000;
+  auto x = static_cast<double>(miles) * 1000000 / velocity;
+  return static_cast<hours>(x);
 }
 
 std::string Ship::formatTime(hours h) const
